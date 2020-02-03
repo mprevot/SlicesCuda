@@ -85,7 +85,7 @@ auto Slices::SliceDeviceToRGBHost(T* target_host, cudaPitchedPtr source_dev) -> 
  * \brief Allocate memory and copy host array to device array.
  * \tparam T typically uint8 (unsigned char)
  * \param deviceArray result array
- * \param hostArray origin array
+ * \param hostArray source array
  */
 template<class T>
 auto Slices::CuInit(T*& deviceArray, const T* hostArray) -> void
@@ -115,7 +115,10 @@ auto Slices::CPUInit(T*& array) -> void
 	if (GetSize() == 0)
 		return;
 	if (array != nullptr)
+	{
 		free(array);
+		array = nullptr;
+	}
 	auto sizeBytes = GetSize() * sizeof(T);
 	array = static_cast<T*>(malloc(sizeBytes));
 	memset(array, 0, GetSize());
